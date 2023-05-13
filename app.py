@@ -3,6 +3,7 @@ from flask import Flask,request
 app = Flask(__name__)
 
 stores = [{"name": "My Store", "items": [{"name": "Chair", "price": 15.99}]}]
+items = {}
 
 @app.get("/store")
 def get_stores():
