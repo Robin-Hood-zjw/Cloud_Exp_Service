@@ -2,17 +2,7 @@ from flask import Flask,request
 
 app = Flask(__name__)
 
-stores = [
-    {
-        "name":"My Store",
-        "items": [
-            {
-                "name": "Chair",
-                "price": 15.99
-            }
-        ]
-    }
-]
+stores = [{"name": "My Store", "items": [{"name": "Chair", "price": 15.99}]}]
 
 @app.get("/store")
 def get_stores():
@@ -32,7 +22,7 @@ def create_item(name):
         if store["name"] == name:
             new_item = {"name": request_data["name"], "price": request_data["price"]}
             store["items"].append(new_item)
-            return new_item
+            return new_item, 201
     return {"message": "Store not found."}, 404
 
 
@@ -40,7 +30,7 @@ def create_item(name):
 def get_store(name):
     for store in stores:
         if store["name"] == name:
-            return store, 200
+            return store
     return {"message": "Store not found."}, 404
 
 @app.get("/store/<string:name>/item")
