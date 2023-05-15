@@ -4,7 +4,9 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from db import stores
 
+
 blp = Blueprint("stores", __name__, description="Operations on stores")
+
 
 @blp.route("/store/<string:store_id>")
 class Store(MethodView):
@@ -20,6 +22,7 @@ class Store(MethodView):
             return {"message": "Store deleted."}
         except:
             abort(404, message="Store not found.")
+
 
 @blp.route("/store")
 class StoreList(MethodView):
