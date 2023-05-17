@@ -1,5 +1,3 @@
-import uuid
-from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
@@ -11,6 +9,15 @@ from schemas import StoreSchema
 
 blp = Blueprint("stores", __name__, description="Operations on stores")
 
+
+@blp.route("/store/<string:store_id>")
+class Store(MethodView):
+    @blp.response(200, StoreSchema)
+    def get(self, store_id):
+        raise NotImplementedError("Getting a store is not implemented.")
+
+    def delete(self, store_id):
+        raise NotImplementedError("Deleting a store is not implemented.")
 
 @blp.route("/store/<string:store_id>")
 class Store(MethodView):
