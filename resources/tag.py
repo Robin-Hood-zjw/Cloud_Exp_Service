@@ -19,4 +19,21 @@ class TagInStore(MethodView):
     @blp.arguments(TagSchema)
     @blp.response(201, TagSchema)
     def post(self, tag_data, store_id):
+        if TagModel.filter(TagModel.store_id == store_id, TagModel.name == tag_data["name"]).first():
+            abort(400, message="A tag with that name already exists in that store.")
         tag = TagModel(**tag_data, store_id=store_id)
+
+        try:
+            db.session.add(tag)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            abort(500, message=str(e))
+
+        return tag
+    
+
+@blp.route("/tag/<string:tag_id>")
+class Tag(MethodView):
+    def get(self, tag_id):
+        tag = TagModel.query.get_or_404(tag_id)
+        return tag
