@@ -4,7 +4,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 from db import db
 from models import StoreModel
-from schemas import StoreSchema, ItemSchema
+from schemas import StoreSchema
 
 
 blp = Blueprint("Stores", "stores", description="Operations on stores")
@@ -18,15 +18,15 @@ class Store(MethodView):
         return store
 
     def delete(self, store_id):
-        store = Store.query.get_or_404(store_id)
-        db.session.commit(store)
+        store = StoreModel.query.get_or_404(store_id)
+        db.session.delete(store)
         db.session.commit()
         return {"message": "Store deleted"}, 200
 
 
 @blp.route("/store")
 class StoreList(MethodView):
-    @blp.response(200, ItemSchema(many=True))
+    @blp.response(200, StoreSchema(many=True))
     def get(self):
         return StoreModel.query.all()
 
