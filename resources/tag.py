@@ -11,7 +11,7 @@ blp = Blueprint("Tags", "tags", description="Operations on tags")
 
 
 # /store/{id}/tag	
-@blp.route("/store/<string:store_id>/tag")
+@blp.route("/store/<int:store_id>/tag")
 class TagsInStore(MethodView):
     @blp.response(200, TagSchema(many=True))
     def get(self, store_id):
@@ -37,7 +37,7 @@ class TagsInStore(MethodView):
     
 
 
-@blp.route("/store/<string:store_id>/tag/<string:tag_id>")
+@blp.route("/store/<int:store_id>/tag/<int:tag_id>")
 class LinkTagsToItem(MethodView):
     @blp.response(201, TagSchema)
     def post(self, item_id, tag_id):
@@ -71,7 +71,7 @@ class LinkTagsToItem(MethodView):
 
 
 
-@blp.route("/tag/<string:tag_id>")
+@blp.route("/tag/<int:tag_id>")
 class Tag(MethodView):
     @blp.response(200, TagSchema)
     def get(self, tag_id):
