@@ -2,6 +2,7 @@ import os
 import secrets
 
 from flask_smorest import Api
+from blocklist import BLOCKLIST
 from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
 
@@ -51,6 +52,14 @@ def create_app(db_url=None):
     @jwt.unauthorized_loader
     def missing_token_callback(error):
         return jsonify({"description": "Request does contain an access token.", "error": "authorization_required"}), 401
+    
+    @jwt.token_in_blocklist_loader
+    def check_if_token_in_blocklist(jwt_header, jwt_payload):
+        return jwt_payload["jti"] in BLOCKLIST
+    
+    @jwt.revoked_token_loader
+    def revoked_token_callback(jwt_header, jwt_payload):
+        return jsonify({"description": "The token has been revoken.", "error": "token_revoked"}), 401
 
     with app.app_context():
         db.create_all()
