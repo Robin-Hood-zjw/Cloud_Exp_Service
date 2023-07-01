@@ -44,6 +44,7 @@ class UserLogin(MethodView):
         
         abort(401, message="Invalid credentials.")
 
+
 @blp.route('/user/<int:user_id>')
 class User(MethodView):
     @blp.response(200, UserSchema)
