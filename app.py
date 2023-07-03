@@ -11,7 +11,7 @@ from db import db
 import models
 
 from resources.tag import blp as TagBlueprint
-from resource.user import blp as UserBlueprint
+from resources.user import blp as UserBlueprint
 from resources.item import blp as ItemBlueprint
 from resources.store import blp as StoreBlueprint
 
