@@ -66,9 +66,6 @@ def create_app(db_url=None):
     def revoked_token_callback(jwt_header, jwt_payload):
         return jsonify({"description": "The token has been revoken.", "error": "token_revoked"}), 401
 
-    # with app.app_context():
-    #     db.create_all()
-
     api.register_blueprint(TagBlueprint)
     api.register_blueprint(ItemBlueprint)
     api.register_blueprint(UserBlueprint)
