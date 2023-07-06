@@ -1,7 +1,12 @@
 import os
 import requests
 
+import redis
+from rq import Queue
+from tasks import send_user_registration_email
+
 from sqlalchemy import or_
+from flask import current_app
 from flask.views import MethodView
 from passlib.hash import pbkdf2_sha256
 from flask_smorest import Blueprint, abort
@@ -11,6 +16,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, get_jw
 from db import db
 from models import UserModel
 from blocklist import BLOCKLIST
+from task import send_user_registration_email
 from schemas import UserSchema, UserRegisterSchema
 
 
@@ -29,6 +35,11 @@ def send_simple_message(to, subject, body):
 			"text": body
         }
     )
+
+connection = redis.from_url(
+    os.getenv("REDIS_URL")
+)  # Get this from Render.com or run in Docker
+queue = Queue("emails", connection=connection)
 
 
 @blp.route('/register')
@@ -49,6 +60,8 @@ class UserRegister(MethodView):
 
         db.session.add(user)
         db.session.commit()
+
+        current_app.queue.enqueue(send_user_registration_email, user.email, user.username)
 
         send_simple_message(
             to=user.email,
