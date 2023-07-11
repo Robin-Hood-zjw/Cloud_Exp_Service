@@ -16,7 +16,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, get_jw
 from db import db
 from models import UserModel
 from blocklist import BLOCKLIST
-from task import send_user_registration_email
+from tasks import send_user_registration_email
 from schemas import UserSchema, UserRegisterSchema
 
 

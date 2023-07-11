@@ -1,4 +1,5 @@
 import os
+import jinja2
 import requests
 from dotenv import load_dotenv
 
@@ -6,14 +7,16 @@ load_dotenv()
 
 DOMAIN = os.getenv("MAILGUN_DOMAIN")
 
-def send_simple_message(to, subject, body):
+def send_simple_message(to, subject, body, html):
     return requests.post(
         f"https://api.mailgun.net/v3/{DOMAIN}/messages",
         auth=("api", os.getenv("MAILGUN_API_KEY")),
         data={"from": f"Your Name <mailgun@{DOMAIN}>",
             "to": [to],
             "subject": subject,
-            "text": body}
+            "text": body,
+            "html": html
+        }
     )
 
 
